@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Reproducible, minimal macOS development environment. See SPEC.md for the full specification and task list.
+Reproducible, minimal macOS development environment. See SPEC.md for the full specification, guiding philosophy, and task list. The philosophy section governs all decisions — consult it before adding anything to the repo.
 
 ## Repository structure
 
