@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-03-05 10:06 — macOS defaults with verify-after-write pattern (Task 7)
+
+Completed SPEC Task 7. Created `scripts/macos.sh` with 20 curated `defaults write` commands across 8 categories: Finder, clock, Dock, screenshots, key repeat, smart text, save dialogs, and conditional laptop settings. Each write is verified with a `defaults read` check that warns if the value didn't stick. Wired into `install.sh` as an interactive prompted step (skipped silently in dry-run mode). Also marked Task 6 (Python project template) as out of scope — it's a developer workflow tool, not machine setup.
+
+Used `/review-plan` with fresh-context subagent, which caught five issues: `_FXShowPosixPathInTitle` is dead on Tahoe (confirmed by testing), key repeat settings were missing, save-to-disk default was missing, extension change warning should complement extension visibility, and settings should be verified after write. All five were addressed. Also discovered that Tahoe uses `ShowAMPM` instead of `Show24Hour` for the clock domain — tested on the actual machine before committing.
+
+**Decisions:**
+- Task 6 removed from spec — project scaffolding doesn't belong in dotfiles (machine setup, not workflow tooling)
+- `_FXShowPosixPathInTitle` dropped — confirmed non-functional on macOS 26.3 Tahoe
+- Clock uses `ShowAMPM -bool false` instead of commonly documented `Show24Hour` — verified on Tahoe
+- `FXPreferredViewStyle` sets default for new folders only — per-folder views stored in `.DS_Store` take priority; use Finder's "Use as Defaults" button for existing folders
+- Key repeat (KeyRepeat=2, InitialKeyRepeat=15) added based on review — requires logout to take effect
+- All five smart text features disabled (auto-correct, auto-capitalize, smart quotes, smart dashes, double-space period)
+- Save dialogs default to local disk and expanded filesystem browser
+- Battery percentage conditional on laptop detection via `pmset -g batt`
+- Verify-after-write pattern: each `defaults write` is checked with `defaults read`, warns on failure
+
+**Follow-ups:**
+- [ ] Task 8: Documentation and session log (README.md, consistency review)
+- [ ] Task 9: Cross-machine sync for ~/.claude/ state
+- [ ] Verify key repeat change after next logout
+
+**Files changed:**
+- `scripts/macos.sh` — new, 20 defaults with verify function, dry-run support, process restarts
+- `install.sh` — added interactive prompt for macOS defaults step
+- `SPEC.md` — Task 6 marked as removed with rationale
+
+**Pickup context:**
+Tasks 1–5 and 7 are complete. Task 6 is removed. Next is Task 8 (README and documentation cleanup) or Task 9 (cross-machine sync). SESSION_LOG.md has uncommitted local changes from multiple sessions — it's tracked but hasn't been committed since Task 2.
+
+---
+
 ## 2026-03-05 09:21 — SSH host shortcuts with modular config.d pattern (Task 5)
 
 Completed SPEC Task 5. Restructured ssh_config to use `Include config.d/*` for modular host entries, with 1Password agent as a global default. Created `ssh_config.d/hosts.example` as a repo-only reference template (not symlinked into the parsed directory). Updated symlinks.sh to create `~/.ssh/config.d/` and set permissions. Used `/review-plan` with fresh-context subagent, which caught three issues: example file shouldn't be in the parsed path, gitignore was too narrow, and missing-directory behavior needed verification. All three were addressed. Also added a script logging convention to CLAUDE.md and covered git fundamentals and dev/prod concepts.
