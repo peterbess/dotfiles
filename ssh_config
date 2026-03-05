@@ -1,2 +1,24 @@
+# SSH configuration — managed by dotfiles
+#
+# Structure:
+#   This file sets global defaults (1Password agent, etc.).
+#   Host-specific entries live in ~/.ssh/config.d/ as separate files.
+#   See ~/dotfiles/ssh_config.d/hosts.example for the template.
+#   Copy it to ~/.ssh/config.d/hosts.local and fill in real values.
+#
+# SSH reads Include directives first, then applies Host/Match blocks
+# in order. The first matching value for each option wins, so put
+# specific Host blocks in config.d/ and keep broad defaults here.
+#
+# Requires: ~/.ssh/config.d/ directory (created by install.sh).
+# If the directory is missing, SSH silently skips the Include — no error.
+
+Include config.d/*
+
+# --- Global defaults -------------------------------------------------------
+
 Host *
+	# Use 1Password SSH agent for all connections.
+	# This lets 1Password manage SSH keys and prompt for biometric
+	# authentication instead of keeping key files on disk.
 	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"

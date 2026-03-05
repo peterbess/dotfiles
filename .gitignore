@@ -1,1 +1,7 @@
 .DS_Store
+
+# Private SSH host entries (real IPs, usernames, hostnames).
+# Only hosts.example is tracked; everything else in this directory
+# is assumed private. Copy hosts.example to hosts.local to get started.
+ssh_config.d/*
+!ssh_config.d/hosts.example

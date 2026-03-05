@@ -158,14 +158,35 @@ log "Checking SSH directory permissions..."
 
 if [[ -d "$HOME/.ssh" ]]; then
     if [[ "$DRY_RUN" == true ]]; then
-        log "Would set ~/.ssh to 700, config files to 600"
+        if [[ ! -d "$HOME/.ssh/config.d" ]]; then
+            log "Would create ~/.ssh/config.d"
+        fi
+        log "Would set ~/.ssh to 700, ~/.ssh/config.d to 700"
+        log "Would set config files to 600"
     else
         chmod 700 "$HOME/.ssh"
         log "Set ~/.ssh → 700"
+
+        # Create config.d/ for modular SSH host configs (used by Include in ssh_config).
+        # Host entries go here as separate files (e.g., hosts.local).
+        if [[ ! -d "$HOME/.ssh/config.d" ]]; then
+            mkdir -p "$HOME/.ssh/config.d"
+            log "Created ~/.ssh/config.d"
+        fi
+        chmod 700 "$HOME/.ssh/config.d"
+        log "Set ~/.ssh/config.d → 700"
+
+        # Set 600 on all SSH config files (top-level and in config.d/)
         for ssh_file in config allowed_signers; do
             if [[ -e "$HOME/.ssh/$ssh_file" ]]; then
                 chmod 600 "$HOME/.ssh/$ssh_file"
                 log "Set ~/.ssh/$ssh_file → 600"
+            fi
+        done
+        for config_d_file in "$HOME/.ssh/config.d"/*; do
+            if [[ -e "$config_d_file" ]]; then
+                chmod 600 "$config_d_file"
+                log "Set $(basename "$config_d_file") → 600"
             fi
         done
     fi

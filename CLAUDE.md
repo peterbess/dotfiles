@@ -27,6 +27,7 @@ Flat layout. Config files live at repo root. `install.sh` symlinks them to their
 - `uv` for Python tooling (replaces pip, virtualenv, pyenv).
 - Brewfile for declarative Homebrew package management.
 - Every line in a config file should have an obvious purpose or a comment explaining it.
+- Scripts must log what they're doing at each step — no silent operations. The user should be able to follow progress and diagnose failures from the output alone.
 
 ## Session log
 

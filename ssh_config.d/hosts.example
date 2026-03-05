@@ -1,0 +1,36 @@
+# SSH host shortcuts — example template
+#
+# This file lives in the repo as a reference. It is NOT symlinked into
+# ~/.ssh/config.d/ — SSH never parses it directly.
+#
+# To use it:
+#   cp ~/dotfiles/ssh_config.d/hosts.example ~/.ssh/config.d/hosts.local
+#   # Edit hosts.local with real values
+#   chmod 600 ~/.ssh/config.d/hosts.local
+#
+# Each entry creates a shortcut: `ssh proxmox` instead of
+# `ssh admin@192.168.1.100 -p 22`.
+#
+# Tips:
+#   - The 1Password agent is already configured globally (in ssh_config),
+#     so you don't need IdentityFile or IdentityAgent per host.
+#   - If a host is only reachable via Tailscale, use the Tailscale IP
+#     or MagicDNS hostname.
+
+# --- Proxmox hypervisor ---
+# Host proxmox
+# 	HostName 100.x.x.x
+# 	User root
+# 	Port 22
+
+# --- TrueNAS storage ---
+# Host truenas
+# 	HostName 100.x.x.x
+# 	User admin
+# 	Port 22
+
+# --- Generic template ---
+# Host nickname
+# 	HostName <ip-or-hostname>
+# 	User <username>
+# 	Port 22
