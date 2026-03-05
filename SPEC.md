@@ -162,4 +162,6 @@ Each task is scoped for a single Claude Code session. Complete them in order —
 - The sync must not put private data (memory files, session logs with project details) into the public dotfiles repo.
 - Skills are reusable and non-sensitive — they could live in a public repo. Memory and session logs are private.
 
+**Known constraint:** Claude Code indexes project sessions by absolute filesystem path (e.g., `~/.claude/projects/-Users-peter-dotfiles/`). If the username or project directory differs between machines, synced memory and session data won't be found. Any sync strategy must account for this path coupling — file-level sync (Syncthing) alone is not sufficient unless both machines use identical paths.
+
 **Verify:** A skill created on one Mac is available on the other. Session logs written on one machine are readable from the other.
