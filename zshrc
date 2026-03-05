@@ -6,7 +6,7 @@
 
 # Homebrew — sets HOMEBREW_PREFIX, HOMEBREW_CELLAR, HOMEBREW_REPOSITORY,
 # and prepends Homebrew's bin/sbin to PATH.
-eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Enable colored ls output without needing -G flag on every invocation.
 # LSCOLORS defines colors for: directory, symlink, socket, pipe, executable,

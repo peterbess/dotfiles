@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-03-05 10:22 — README and fresh Mac setup guide (Task 8)
+
+Completed SPEC Task 8. Wrote README.md with project overview, file tables, uninstall instructions, and a step-by-step fresh Mac setup guide covering everything from Xcode CLI tools through 1Password SSH agent to running install.sh. Used `/review-plan` with fresh-context subagent, which caught four issues: missing uninstall/undo section, no "new shell required" note, hardcoded `~/dotfiles` path not documented, and misleading Brewfile row in the symlink table. All four were addressed. Also ran a consistency review across all repo files (no issues found) and corrected a stale memory note about personal info in repo files.
+
+**Decisions:**
+- Fresh Mac setup guide lives in README.md (not a separate file) — it's the first thing a new user needs
+- Uninstall section added to honor SPEC philosophy ("the undo path matters")
+- Hardcoded `~/dotfiles` path documented as a requirement rather than fixing in scripts (code change beyond Task 8 scope)
+- iTerm2 font/color preferences noted as manual (not dotfiles-managed)
+
+**Follow-ups:**
+- [ ] Task 9: Cross-machine sync for ~/.claude/ state (blocked until second Mac available)
+
+**Files changed:**
+- `README.md` — new, fresh Mac setup guide, quick start, file tables, uninstall, prerequisites
+
+**Pickup context:**
+Tasks 1–5, 7, and 8 are complete. Task 6 was removed. Only Task 9 (cross-machine sync) remains and is blocked on having a second Mac to test with. The dotfiles project is functionally complete for single-machine use.
+
+---
+
 ## 2026-03-05 10:06 — macOS defaults with verify-after-write pattern (Task 7)
 
 Completed SPEC Task 7. Created `scripts/macos.sh` with 20 curated `defaults write` commands across 8 categories: Finder, clock, Dock, screenshots, key repeat, smart text, save dialogs, and conditional laptop settings. Each write is verified with a `defaults read` check that warns if the value didn't stick. Wired into `install.sh` as an interactive prompted step (skipped silently in dry-run mode). Also marked Task 6 (Python project template) as out of scope — it's a developer workflow tool, not machine setup.

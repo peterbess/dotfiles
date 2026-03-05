@@ -6,7 +6,19 @@ Reproducible, minimal macOS development environment for Apple Silicon Macs. Take
 
 Start here on a brand new macOS install. If you already have Homebrew and 1Password, skip to [Quick start](#quick-start).
 
-### 1. Install Xcode Command Line Tools
+### 1. Set the hostname
+
+macOS defaults to something like "Peter's MacBook Air" which shows up in your terminal prompt, Bonjour, and Finder. Fix it early:
+
+```bash
+sudo scutil --set ComputerName "your-hostname"
+sudo scutil --set HostName "your-hostname"
+sudo scutil --set LocalHostName "your-hostname"
+```
+
+LocalHostName must be alphanumeric and hyphens only (no spaces). Close Terminal entirely and reopen it to see the change in your prompt.
+
+### 2. Install Xcode Command Line Tools
 
 ```bash
 xcode-select --install
@@ -14,7 +26,7 @@ xcode-select --install
 
 This provides `git`, `clang`, and other basics. Follow the dialog prompt.
 
-### 2. Install Homebrew
+### 3. Install Homebrew
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -22,7 +34,9 @@ This provides `git`, `clang`, and other basics. Follow the dialog prompt.
 
 After it finishes, run the `eval` command it prints to add Homebrew to your PATH for the current session. (The dotfiles zshrc handles this permanently once installed.)
 
-### 3. Install and configure 1Password
+**Important:** The installer will suggest adding an `eval` line to `~/.zprofile`. Skip this — the dotfiles zshrc handles Homebrew's PATH automatically.
+
+### 4. Install and configure 1Password
 
 ```bash
 brew install --cask 1password
@@ -34,9 +48,15 @@ Open 1Password, sign in to your account, then enable the SSH agent:
 2. Enable **Set up SSH Agent**
 3. Enable **Integrate with 1Password CLI** (optional but useful)
 
-This is needed before cloning the repo, because the clone URL uses SSH and commit signing requires the 1Password SSH agent.
+Then point your current shell at the 1Password agent so SSH works before the dotfiles are installed:
 
-### 4. Add your SSH key to GitHub
+```bash
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+```
+
+This is a temporary one-session export. The dotfiles `zshenv` sets it permanently once installed.
+
+### 5. Add your SSH key to GitHub
 
 In 1Password, find your SSH key and copy the public key. Add it to GitHub in two places:
 
@@ -51,7 +71,7 @@ ssh -T git@github.com
 
 You should see "Hi [username]! You've successfully authenticated."
 
-### 5. Clone and install
+### 6. Clone and install
 
 ```bash
 git clone git@github.com:peterbess/dotfiles.git ~/dotfiles
@@ -60,17 +80,22 @@ cd ~/dotfiles
 ./install.sh              # run for real
 ```
 
-### 6. Open a new terminal tab
+Homebrew cask installs will prompt for your admin password.
+
+If you have existing config files (e.g., from Migration Assistant), use `./install.sh --force` to back them up to `~/.dotfiles-backup/` and replace them with symlinks.
+
+### 7. Open a new terminal tab
 
 Your new shell configuration takes effect in new sessions. Open a new tab and confirm:
 
 ```bash
-which uv          # should resolve to /opt/homebrew/bin/uv
+which uv               # should resolve to /opt/homebrew/bin/uv
 git config user.name   # should show your name
 echo $SSH_AUTH_SOCK    # should show the 1Password agent path
+git log --show-signature -1   # should show "Good signature" for the latest commit
 ```
 
-### 7. iTerm2 (optional)
+### 8. iTerm2 (optional)
 
 The Brewfile installs iTerm2. Font and color preferences are not managed by dotfiles — configure them in iTerm2 > Settings > Profiles. The repo uses Monaspace Argon as the coding font.
 
@@ -94,6 +119,12 @@ cd ~/dotfiles
 ```
 
 `--force` moves conflicting files to `~/.dotfiles-backup/<timestamp>/` before creating symlinks. Without it, conflicts produce a warning and skip.
+
+To update an existing install, pull and re-run:
+
+```bash
+cd ~/dotfiles && git pull && ./install.sh
+```
 
 **Important:** Scripts expect the repo cloned to `~/dotfiles`. Do not rename or move it. Open a new terminal tab after installing for changes to take effect.
 
