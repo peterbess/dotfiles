@@ -117,13 +117,9 @@ Each task is scoped for a single Claude Code session. Complete them in order —
 
 ---
 
-### Task 6: Python project template
+### ~~Task 6: Python project template~~ (removed)
 
-**Do:**
-- Create a small script or shell function (`mkproject`) that scaffolds a new Python project: creates a directory, initializes a `uv` project (`uv init`), creates a `.python-version` file, initializes git, and copies in a starter `CLAUDE.md`.
-- Place the template CLAUDE.md in `dotfiles/templates/claude-md-python`.
-
-**Verify:** Run `mkproject test-project`, confirm the directory structure is correct, `uv run python --version` works inside it, and git is initialized.
+Out of scope. Project scaffolding is a developer workflow tool, not machine setup. Add a `mkproject` function to zshrc if/when the need arises from actual use.
 
 ---
 

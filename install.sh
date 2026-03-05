@@ -65,8 +65,18 @@ run_script "$SCRIPTS_DIR/symlinks.sh"
 # Step 2: Homebrew packages and Python
 run_script "$SCRIPTS_DIR/brew.sh"
 
-# Future steps will be added here as tasks are completed:
-# Step 3: macOS defaults (scripts/macos.sh)
+# Step 3: macOS defaults (prompted — not automatic)
+if [[ "$DRY_RUN" == true ]]; then
+    echo "  Would prompt to apply macOS defaults (skipped in dry run)"
+else
+    echo ""
+    read -rp "  Apply macOS defaults? [y/N] " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        run_script "$SCRIPTS_DIR/macos.sh"
+    else
+        echo "  Skipping macOS defaults."
+    fi
+fi
 
 # --- Done ------------------------------------------------------------------
 

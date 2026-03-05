@@ -2,6 +2,91 @@
 
 ---
 
+## 2026-03-05 09:21 — SSH host shortcuts with modular config.d pattern (Task 5)
+
+Completed SPEC Task 5. Restructured ssh_config to use `Include config.d/*` for modular host entries, with 1Password agent as a global default. Created `ssh_config.d/hosts.example` as a repo-only reference template (not symlinked into the parsed directory). Updated symlinks.sh to create `~/.ssh/config.d/` and set permissions. Used `/review-plan` with fresh-context subagent, which caught three issues: example file shouldn't be in the parsed path, gitignore was too narrow, and missing-directory behavior needed verification. All three were addressed. Also added a script logging convention to CLAUDE.md and covered git fundamentals and dev/prod concepts.
+
+**Decisions:**
+- Example template stays in repo only, not symlinked into ~/.ssh/config.d/ — avoids SSH parsing an inert file and risk of editing the symlink target
+- Broad gitignore pattern (`ssh_config.d/*` with `!hosts.example` exception) instead of just `hosts.local` — protects any private file in that directory
+- macOS SSH silently skips `Include config.d/*` when directory is missing — tested and confirmed, no special handling needed
+- Added convention to CLAUDE.md: scripts must log progress at each step, no silent operations
+
+**Follow-ups:**
+- [ ] Task 6: Python project template (mkproject)
+- [ ] Verify signed commit shows "Verified" badge on GitHub for this push
+- [ ] Create actual ~/.ssh/config.d/hosts.local when homelab SSH access is needed
+- [ ] Future: git-track Home Assistant config on its VM (noted in auto-memory)
+
+**Files changed:**
+- `ssh_config` — added Include directive, comments explaining structure and config.d dependency
+- `ssh_config.d/hosts.example` — new, reference template for host shortcuts (repo-only, not symlinked)
+- `scripts/symlinks.sh` — creates ~/.ssh/config.d/, sets 700 on dirs, 600 on all config files in config.d/
+- `.gitignore` — broad pattern for ssh_config.d/ with exception for hosts.example
+- `CLAUDE.md` — added script logging convention
+
+**Pickup context:**
+Task 5 is complete and pushed. SESSION_LOG.md has uncommitted local changes (this entry plus previous session entries that were already pushed but modified locally). Task 6 (Python project template with mkproject) is next per SPEC.md.
+
+---
+
+## 2026-03-05 08:48 — Git configuration with SSH commit signing (Task 4)
+
+Completed SPEC Task 4. Added git defaults (pull.rebase, push.autoSetupRemote, init.defaultBranch), SSH commit signing via 1Password, and review-driven additions: rerere, zdiff3 conflict style, histogram diff algorithm. Created `allowed_signers` file for local signature verification. Used `/review-plan` to catch missing options and surface the path-indexing constraint for Task 9's cross-machine sync.
+
+**Decisions:**
+- Same SSH key for auth and signing — standard practice, no security benefit to separate keys
+- Editor left as nano (via EDITOR env var) rather than setting core.editor — revisit when/if VS Code is added
+- Literal public key in gitconfig rather than 1Password CLI reference — fewer dependencies, standard approach
+- SESSION_LOG.md stays tracked in git for now — not sensitive, provides working backup until a better sync path is designed
+- rerere, zdiff3, histogram added based on review research — all zero-downside improvements
+- branch.sort skipped — add when friction is felt, per project philosophy
+
+**Follow-ups:**
+- [ ] Task 5: SSH host shortcuts
+- [ ] Verify "Verified" badge appears on GitHub for the signed commits
+- [ ] SPEC.md Task 8 still references "Create SESSION_LOG.md" as a deliverable — may need revision when Task 8 is worked
+
+**Files changed:**
+- `gitconfig` — added defaults, signing config, rerere, zdiff3, histogram diff
+- `allowed_signers` — new, maps email to public key for local signature verification
+- `scripts/symlinks.sh` — added allowed_signers symlink and expanded SSH permissions loop
+- `SPEC.md` — updated Task 4 editor line, added path-indexing constraint to Task 9
+
+**Pickup context:**
+Task 4 is complete and pushed (both commits signed). The signing key has been added to GitHub as a signing key. Task 9 now documents that Claude Code's path-indexed project sessions mean Syncthing alone won't solve cross-machine sync. Task 5 (SSH host shortcuts) is next.
+
+---
+
+## 2026-03-04 19:39 — Zsh configuration with zshenv/zshrc split (Task 3)
+
+Completed SPEC Task 3. Split shell config into `zshenv` (SSH_AUTH_SOCK, EDITOR for non-interactive shells) and `zshrc` (PATH, history, aliases, git-aware prompt). Added `~/.local/bin` to PATH for uv tools, CLICOLOR/LSCOLORS for colored `ls` output, history persistence, and a user@host prompt with git branch display. Removed redundant `~/.zprofile` left by the Homebrew installer. Also fixed the `review-plan` skill by removing `disable-model-invocation`.
+
+**Decisions:**
+- zshenv gets only non-PATH env vars (SSH_AUTH_SOCK, EDITOR); PATH setup stays in zshrc because macOS path_helper reorders PATH between zshenv and zshrc
+- EDITOR set to nano (always available, covers git commit messages and crontab)
+- Alias `gst` instead of `gs` to avoid Ghostscript collision
+- Full path prompt (`%~`) over directory-name-only (`%1~`) for visibility while learning
+- user@host in prompt for multi-machine SSH awareness
+- Hand-rolled git prompt function over zsh's vcs_info for transparency
+- Dropped `git describe --tags --exact-match` fallback as too narrow; symbolic-ref → rev-parse --short covers real cases
+- LSCOLORS and CLICOLOR added to replace oh-my-zsh's automatic ls colorization
+
+**Follow-ups:**
+- [ ] Task 4: Git configuration (defaults, signing, editor)
+- [ ] Revisit zsh plugins (e.g., zsh-syntax-highlighting) as friction points arise
+
+**Files changed:**
+- `zshenv` — new, SSH_AUTH_SOCK and EDITOR for all zsh contexts
+- `zshrc` — rewritten with sections: environment, PATH, history, aliases, prompt
+- `scripts/symlinks.sh` — added zshenv to symlink array
+- `~/.claude/skills/review-plan/SKILL.md` — removed disable-model-invocation
+
+**Pickup context:**
+Task 3 is complete and pushed. The `review-plan` skill now works when invoked by the model. `~/.zprofile` was removed (it only had a redundant `brew shellenv`). Task 4 (git configuration) is next per SPEC.md.
+
+---
+
 ## 2026-03-04 — iTerm2 customization and Task 2 (Brewfile/uv)
 
 Two things done this session. First, set up iTerm2: Gruvbox Dark/Light color theme with auto-switching based on macOS appearance, Monaspace Argon font, and increased margins. These are iTerm2 preferences (not dotfiles-managed) and were documented for the Mac Setup Guide.
