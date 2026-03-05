@@ -2,6 +2,68 @@
 
 ---
 
+## 2026-03-05 14:45 — Storage schema design and ~/projects/storage project
+
+Designed a complete personal data infrastructure: TrueNAS as SSOT, Syncthing mesh (two Macs + TrueNAS) for active data sync, organized file schema with inbox/triage flow. Created the storage project at ~/projects/storage/ with full SPEC.md and CLAUDE.md. Completed dotfiles SPEC.md Task 9 (cross-machine Claude state sync) as part of this design.
+
+**Decisions:**
+- TrueNAS is SSOT; Macs are workspaces with synced working copies
+- Syncthing for sync (projects/, documents/, claude state), with .git in .stignore
+- ~/projects/ is the convention for all active work (git and non-git)
+- Claude sync scoped to skills, memory, and CLAUDE.md only — not settings/cache/debug
+- documents/ categories: career, finance, personal, tech, health
+- TrueNAS access primarily via SSH/rsync, SMB as fallback
+- Backup: ZFS snapshots + Cryptomator/OneDrive for critical offsite + Glacier (future)
+- Phased rollout: 7 phases, each stable a week before advancing
+- PROJECTNUKE name kept for migration staging area
+- Mac Studio is "ambrose", MacBook Air is "bonaventure", TrueNAS is "ember"
+
+**Files changed:**
+- `~/projects/storage/SPEC.md` — new, full storage infrastructure specification
+- `~/projects/storage/CLAUDE.md` — new, project context for Claude Code
+- `SPEC.md` — Task 9 marked complete, references storage project
+
+**Pickup context:**
+The storage project spec is complete and reviewed (fresh-context critique incorporated). Implementation starts with Phase 1: Syncthing for documents/. The dotfiles project will need Syncthing added to its Brewfile. Dotfiles move to ~/projects/dotfiles happens in Phase 3.
+
+---
+
+## 2026-03-05 13:26 — Fresh install on MacBook Air and shell improvements
+
+Real-world tested the dotfiles on a second Mac (MacBook Air, named "bonaventure"). Found and fixed several issues: SSH config bootstrapping conflict, Homebrew's auto-created ~/.zprofile, missing hostname step, and undocumented expected warnings. After the install was working cleanly, added shell quality-of-life improvements: zsh-syntax-highlighting, zsh-autosuggestions, and a root-aware prompt with bold reverse-video red for root sessions.
+
+**Decisions:**
+- Single SSH agent mechanism: SSH_AUTH_SOCK in zshenv only, removed IdentityAgent from ssh_config to avoid dual-path divergence
+- Temporary `export SSH_AUTH_SOCK` in README step 4 instead of creating ~/.ssh/config before cloning — eliminates bootstrapping conflict
+- Auto-remove ~/.zprofile in install script (backs up, doesn't delete) since Homebrew creates it and zshrc handles the same eval
+- Guard brew shellenv with existence check for pre-Homebrew shells
+- Reverse-video red for root prompt instead of blink — works in all terminals, doesn't depend on iTerm2 settings
+- zsh plugins via Homebrew (standalone, no oh-my-zsh) — only syntax-highlighting and autosuggestions, declined enhanced tab completion and auto-cd
+- iTerm2 Gruvbox color schemes stored in repo with prompted import step in install.sh
+- Homebrew manages claude-code (not native installer) — consistent with "Homebrew everything" philosophy
+- iTerm2 transparency at 10% with blur — personal preference, not dotfiles-managed
+
+**Follow-ups:**
+- [ ] Pull and run `git pull && brew bundle && ./install.sh` on the Air to pick up latest changes
+- [ ] Task 9: Cross-machine sync — deferred until both machines used for a while
+- [ ] Shell customizations: add more as friction points arise (aliases, tab completion, etc.)
+
+**Files changed:**
+- `README.md` — hostname step, bootstrapping fix, zprofile note, sudo note, signing verification, update instructions, iTerm2 setup expanded
+- `ssh_config` — removed IdentityAgent, single agent mechanism via SSH_AUTH_SOCK
+- `zshrc` — guarded brew shellenv, root-aware prompt, zsh plugin sourcing with warnings
+- `zshenv` — unchanged but now sole owner of SSH_AUTH_SOCK
+- `Brewfile` — added zsh-syntax-highlighting and zsh-autosuggestions
+- `install.sh` — added iTerm2 color scheme import step (prompted)
+- `scripts/symlinks.sh` — auto-remove ~/.zprofile with backup
+- `iterm2/gruvbox-dark.itermcolors` — new, Gruvbox Dark color scheme
+- `iterm2/gruvbox-light.itermcolors` — new, Gruvbox Light color scheme
+
+**Pickup context:**
+MacBook Air (bonaventure) needs a final `git pull && brew bundle && ./install.sh` to get the zsh plugins and latest fixes. All SPEC tasks complete except Task 9 (cross-machine sync), deliberately deferred. The dotfiles are now battle-tested on two machines. Next shell improvements should come from real friction, not anticipation.
+
+---
+
 ## 2026-03-05 10:22 — README and fresh Mac setup guide (Task 8)
 
 Completed SPEC Task 8. Wrote README.md with project overview, file tables, uninstall instructions, and a step-by-step fresh Mac setup guide covering everything from Xcode CLI tools through 1Password SSH agent to running install.sh. Used `/review-plan` with fresh-context subagent, which caught four issues: missing uninstall/undo section, no "new shell required" note, hardcoded `~/dotfiles` path not documented, and misleading Brewfile row in the symlink table. All four were addressed. Also ran a consistency review across all repo files (no issues found) and corrected a stale memory note about personal info in repo files.
