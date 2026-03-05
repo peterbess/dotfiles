@@ -99,7 +99,18 @@ cd ~/dotfiles && git log --show-signature -1   # should show "Good signature"
 
 ### 8. iTerm2 (optional)
 
-The Brewfile installs iTerm2. Font and color preferences are not managed by dotfiles — configure them in iTerm2 > Settings > Profiles. The repo uses Monaspace Argon as the coding font.
+The Brewfile installs iTerm2. Import the Gruvbox color schemes:
+
+```bash
+open ~/dotfiles/iterm2/gruvbox-dark.itermcolors
+open ~/dotfiles/iterm2/gruvbox-light.itermcolors
+```
+
+Each `open` triggers an iTerm2 import dialog. Then configure manually in iTerm2 > Settings > Profiles:
+
+1. **Colors** — Select "gruvbox-dark" from the Color Presets dropdown
+2. **Font** — Set to Monaspace Argon (installed via Brewfile)
+3. **Auto-switch** (optional) — Create a Light profile using gruvbox-light, then under Profiles > Advanced > Automatic Profile Switching, set it to activate when the system appearance is light
 
 ---
 
@@ -150,6 +161,7 @@ The installer runs three steps in order:
 | `ssh_config` | `~/.ssh/config` | 1Password agent, `Include config.d/*` for host entries |
 | `allowed_signers` | `~/.ssh/allowed_signers` | Maps email to public key for local signature verification |
 | `Brewfile` | *(not symlinked)* | Declarative package list: git, gh, uv, 1Password, iTerm2, fonts |
+| `iterm2/` | *(not symlinked)* | Gruvbox Dark/Light color schemes for import into iTerm2 |
 
 ### Scripts
 

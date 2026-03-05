@@ -78,6 +78,28 @@ else
     fi
 fi
 
+# Step 4: iTerm2 color schemes (prompted — requires iTerm2 running)
+if [[ "$DRY_RUN" == true ]]; then
+    echo "  Would prompt to import iTerm2 color schemes (skipped in dry run)"
+else
+    echo ""
+    read -rp "  Import iTerm2 color schemes (Gruvbox Dark/Light)? [y/N] " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "=== iTerm2 Color Schemes ==="
+        echo ""
+        for scheme in "$DOTFILES_DIR"/iterm2/*.itermcolors; do
+            echo "  Importing $(basename "$scheme")..."
+            open "$scheme"
+        done
+        echo ""
+        echo "  Click 'OK' on each import dialog in iTerm2."
+        echo "  Then set the color preset in iTerm2 > Settings > Profiles > Colors."
+    else
+        echo "  Skipping iTerm2 color schemes."
+    fi
+fi
+
 # --- Done ------------------------------------------------------------------
 
 echo "========================================="
