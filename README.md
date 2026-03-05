@@ -34,7 +34,7 @@ This provides `git`, `clang`, and other basics. Follow the dialog prompt.
 
 After it finishes, run the `eval` command it prints to add Homebrew to your PATH for the current session. (The dotfiles zshrc handles this permanently once installed.)
 
-**Important:** The installer will suggest adding an `eval` line to `~/.zprofile`. Skip this — the dotfiles zshrc handles Homebrew's PATH automatically.
+**Note:** If Homebrew's post-install instructions led you to create a `~/.zprofile`, the install script detects and removes it automatically — the dotfiles zshrc handles Homebrew's PATH.
 
 ### 4. Install and configure 1Password
 
@@ -92,8 +92,10 @@ Your new shell configuration takes effect in new sessions. Open a new tab and co
 which uv               # should resolve to /opt/homebrew/bin/uv
 git config user.name   # should show your name
 echo $SSH_AUTH_SOCK    # should show the 1Password agent path
-git log --show-signature -1   # should show "Good signature" for the latest commit
+cd ~/dotfiles && git log --show-signature -1   # should show "Good signature"
 ```
+
+**Note:** The install script will show a warning that `~/.local/bin` is not on your PATH. This is expected — it's referring to the old shell session. The new tab picks up the correct PATH from zshrc.
 
 ### 8. iTerm2 (optional)
 

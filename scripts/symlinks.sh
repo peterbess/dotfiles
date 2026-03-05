@@ -150,6 +150,28 @@ for entry in "${SYMLINKS[@]}"; do
     fi
 done
 
+# --- Clean up ~/.zprofile --------------------------------------------------
+# Homebrew's installer creates ~/.zprofile with a brew shellenv eval line.
+# Our zshrc handles this, so the file is redundant and causes a double-eval.
+
+if [[ -f "$HOME/.zprofile" ]]; then
+    # Check if the file contains only the Homebrew eval (plus blanks/comments).
+    non_brew_lines=$(grep -v -E '^\s*$|^\s*#|eval.*brew shellenv' "$HOME/.zprofile" || true)
+    if [[ -z "$non_brew_lines" ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+            log "Would remove ~/.zprofile (only contains Homebrew eval, handled by zshrc)"
+        else
+            local_backup_dir="$(backup_dir)"
+            mkdir -p "$local_backup_dir"
+            mv "$HOME/.zprofile" "$local_backup_dir/"
+            log "Removed ~/.zprofile → backed up to $local_backup_dir/ (Homebrew eval handled by zshrc)"
+            (( COUNT_BACKED_UP++ ))
+        fi
+    else
+        warn "~/.zprofile contains non-Homebrew content — leaving it in place"
+    fi
+fi
+
 # --- SSH permissions -------------------------------------------------------
 # SSH is strict about file permissions. Ensure they're correct.
 
