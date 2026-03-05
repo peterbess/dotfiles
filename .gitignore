@@ -1,4 +1,5 @@
 .DS_Store
+SESSION_LOG.md
 
 # Private SSH host entries (real IPs, usernames, hostnames).
 # Only hosts.example is tracked; everything else in this directory
