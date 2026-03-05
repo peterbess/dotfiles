@@ -83,7 +83,7 @@ if [[ "$DRY_RUN" == true ]]; then
     echo "  Would prompt to import iTerm2 color schemes (skipped in dry run)"
 else
     echo ""
-    read -rp "  Import iTerm2 color schemes (Gruvbox Dark/Light)? [y/N] " answer
+    read -rp "  Import iTerm2 color schemes? (iTerm2 must be open) [y/N] " answer
     if [[ "$answer" =~ ^[Yy]$ ]]; then
         echo ""
         echo "=== iTerm2 Color Schemes ==="
