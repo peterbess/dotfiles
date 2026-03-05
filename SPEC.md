@@ -150,3 +150,16 @@ Each task is scoped for a single Claude Code session. Complete them in order —
 - Review all files for consistency and remove anything that doesn't earn its place.
 
 **Verify:** A stranger reading `README.md` could understand the project and run the install.
+
+---
+
+### Task 9: Cross-machine sync for `~/.claude/` state
+
+**Current state:** Skills, memory files, and session logs in `~/.claude/` are local to each Mac. Working across two machines means context is split.
+
+**Do:**
+- Design a sync strategy for `~/.claude/` content (skills, memory, session logs) across machines. Options include a dedicated git repo, symlinks into dotfiles, or a sync tool like Syncthing.
+- The sync must not put private data (memory files, session logs with project details) into the public dotfiles repo.
+- Skills are reusable and non-sensitive — they could live in a public repo. Memory and session logs are private.
+
+**Verify:** A skill created on one Mac is available on the other. Session logs written on one machine are readable from the other.

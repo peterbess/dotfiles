@@ -62,8 +62,10 @@ run_script() {
 # Step 1: Symlinks
 run_script "$SCRIPTS_DIR/symlinks.sh"
 
+# Step 2: Homebrew packages and Python
+run_script "$SCRIPTS_DIR/brew.sh"
+
 # Future steps will be added here as tasks are completed:
-# Step 2: Homebrew (scripts/brew.sh)
 # Step 3: macOS defaults (scripts/macos.sh)
 
 # --- Done ------------------------------------------------------------------

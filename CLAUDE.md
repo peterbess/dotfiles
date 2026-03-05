@@ -30,11 +30,23 @@ Flat layout. Config files live at repo root. `install.sh` symlinks them to their
 
 ## Session log
 
-After completing work in a session, append a summary to `SESSION_LOG.md`:
+Use `/done` at the end of a session to capture a structured summary. It writes to `SESSION_LOG.md` at the project root (reverse chronological — newest first). Entry format:
 
 ```
-## YYYY-MM-DD — Short description
+## YYYY-MM-DD HH:MM — Topic summary
 What was done (1-3 sentences).
-Files changed: list them.
-Decisions made: anything worth remembering.
+
+**Decisions:**
+- What was confirmed or chosen
+
+**Follow-ups:**
+- [ ] Concrete next steps
+
+**Files changed:**
+- `path` — what changed
+
+**Pickup context:**
+What the next session needs to know.
 ```
+
+Sections with no content are omitted. Outside a project, the log goes to `~/.claude/session-log.md`.
