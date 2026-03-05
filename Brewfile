@@ -10,6 +10,10 @@ brew "uv"                   # Python toolchain: versions, venvs, dependencies
                             # brew upgrades never break virtual environments. See
                             # scripts/brew.sh for details.
 
+# Zsh plugins (standalone, no framework needed)
+brew "zsh-syntax-highlighting"  # Colors commands as you type: green=valid, red=not found
+brew "zsh-autosuggestions"      # Gray ghost text from history, accept with right arrow
+
 # GUI applications
 cask "1password"            # Password manager with SSH agent and developer integrations
 cask "claude-code"          # Anthropic's terminal AI coding assistant

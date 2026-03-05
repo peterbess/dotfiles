@@ -47,5 +47,26 @@ _git_branch() {
 }
 
 setopt PROMPT_SUBST
-# %n = username, %m = short hostname, %~ = path with ~ abbreviation
-PS1='%F{green}%n@%m%f:%F{cyan}%~%f%F{yellow}$(_git_branch)%f %# '
+# %(!...) is a ternary: true branch for root, false branch for normal user.
+# Root gets bold reverse-video red user@host — impossible to miss. Normal gets green.
+PS1='%(!.%F{red}%S%B%n@%m%b%s%f.%F{green}%n@%m%f):%F{cyan}%~%f%F{yellow}$(_git_branch)%f %# '
+
+# === Plugins ================================================================
+# Sourced last. Syntax highlighting must come after all zle widgets are defined
+# because it wraps the line editor to intercept keystrokes.
+# Requires HOMEBREW_PREFIX from brew shellenv above.
+
+# Autosuggestions — gray ghost text from command history. Accept with →.
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+elif [[ -n "$HOMEBREW_PREFIX" ]]; then
+    echo "[zshrc] zsh-autosuggestions not found — run 'brew bundle' to install"
+fi
+
+# Syntax highlighting — colors commands as you type (green=valid, red=not found).
+# MUST be the last sourced plugin.
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+elif [[ -n "$HOMEBREW_PREFIX" ]]; then
+    echo "[zshrc] zsh-syntax-highlighting not found — run 'brew bundle' to install"
+fi
