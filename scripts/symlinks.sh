@@ -30,6 +30,7 @@ declare -a SYMLINKS=(
     "zshenv:$HOME/.zshenv"
     "zshrc:$HOME/.zshrc"
     "ssh_config:$HOME/.ssh/config"
+    "allowed_signers:$HOME/.ssh/allowed_signers"
 )
 
 # --- Counters for summary -------------------------------------------------
@@ -161,10 +162,12 @@ if [[ -d "$HOME/.ssh" ]]; then
     else
         chmod 700 "$HOME/.ssh"
         log "Set ~/.ssh → 700"
-        if [[ -e "$HOME/.ssh/config" ]]; then
-            chmod 600 "$HOME/.ssh/config"
-            log "Set ~/.ssh/config → 600"
-        fi
+        for ssh_file in config allowed_signers; do
+            if [[ -e "$HOME/.ssh/$ssh_file" ]]; then
+                chmod 600 "$HOME/.ssh/$ssh_file"
+                log "Set ~/.ssh/$ssh_file → 600"
+            fi
+        done
     fi
 fi
 

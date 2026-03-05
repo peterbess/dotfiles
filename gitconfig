@@ -1,3 +1,57 @@
 [user]
 	name = Peter Bess
 	email = github73@peterbess.com
+	# SSH signing key from 1Password (same key used for auth)
+	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGZDTKd0iFaAmkWLhNg0Vvma381C/14oSWlAIXSCVF36
+
+[init]
+	# All new repos start with "main" as the default branch
+	defaultBranch = main
+
+[pull]
+	# Rebase local commits on top of fetched changes instead of creating
+	# merge commits. Keeps history linear and readable.
+	rebase = true
+
+[push]
+	# Automatically set upstream tracking on first push, so you never
+	# need "git push -u origin branch" — just "git push".
+	autoSetupRemote = true
+
+[merge]
+	# Show three sections in conflict markers: ours, base (common ancestor),
+	# theirs. The base section shows what the code looked like before either
+	# side changed it, making conflicts much easier to understand.
+	conflictstyle = zdiff3
+
+[diff]
+	# Produces more readable diffs than the default myers algorithm,
+	# especially when code blocks are moved or reorganized.
+	algorithm = histogram
+
+[rerere]
+	# "Reuse recorded resolution" — Git remembers how you resolved a
+	# conflict and auto-applies the same fix if it sees it again.
+	# Particularly useful with pull.rebase since rebasing can replay
+	# the same conflicts multiple times.
+	enabled = true
+
+[gpg]
+	# Use SSH keys (via 1Password) for commit signing instead of GPG
+	format = ssh
+
+[gpg "ssh"]
+	# 1Password's signing helper — bundled with the app, no op CLI needed.
+	# Git calls this binary, 1Password prompts for biometric, signature done.
+	# If signing fails, check: is 1Password running and unlocked?
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	# Maps emails to public keys for local signature verification
+	allowedSignersFile = ~/.ssh/allowed_signers
+
+[commit]
+	# Sign all commits automatically
+	gpgsign = true
+
+[tag]
+	# Sign all tags automatically
+	gpgSign = true

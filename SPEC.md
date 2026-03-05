@@ -97,7 +97,7 @@ Each task is scoped for a single Claude Code session. Complete them in order —
 
 **Do:**
 - Add sensible defaults to `gitconfig`: default branch name (`main`), `pull.rebase = true`, `init.defaultBranch = main`.
-- Add `[core] editor = claude` if that's how you want to handle commit message editing, or leave it unset to use the default. Discuss the tradeoff.
+- Leave `core.editor` unset — it falls back to `EDITOR` (nano via zshenv). Nano is always available and handles the rare cases where Git needs an editor (commit without `-m`, interactive rebase). Revisit if/when VS Code is added.
 - Configure 1Password as the Git commit signing method if you want signed commits (SSH signing via 1Password). Otherwise, skip and note why.
 
 **Verify:** `git config --global --list` shows expected values. Create a test repo, make a commit, confirm settings apply.
