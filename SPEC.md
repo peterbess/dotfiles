@@ -149,15 +149,10 @@ Out of scope. Project scaffolding is a developer workflow tool, not machine setu
 
 ---
 
-### Task 9: Cross-machine sync for `~/.claude/` state
+### Task 9: Cross-machine sync for `~/.claude/` state — COMPLETE
 
-**Current state:** Skills, memory files, and session logs in `~/.claude/` are local to each Mac. Working across two machines means context is split.
+Designed as part of the storage project. See `~/projects/storage/SPEC.md` for the full sync architecture.
 
-**Do:**
-- Design a sync strategy for `~/.claude/` content (skills, memory, session logs) across machines. Options include a dedicated git repo, symlinks into dotfiles, or a sync tool like Syncthing.
-- The sync must not put private data (memory files, session logs with project details) into the public dotfiles repo.
-- Skills are reusable and non-sensitive — they could live in a public repo. Memory and session logs are private.
+**Summary:** Claude state sync is Phase 4 of a broader storage and sync infrastructure built around Syncthing + TrueNAS as SSOT. Syncthing syncs skills, per-project memory (MEMORY.md), and global CLAUDE.md across both Macs via a TrueNAS bridge node. Settings, debug, cache, and history stay machine-local. Both Macs use username `peter` and `~/projects/` as the project root, so Claude Code's path-based indexing resolves identically on both machines. Symlinks connect synced paths into `~/.claude/`.
 
-**Known constraint:** Claude Code indexes project sessions by absolute filesystem path (e.g., `~/.claude/projects/-Users-peter-dotfiles/`). If the username or project directory differs between machines, synced memory and session data won't be found. Any sync strategy must account for this path coupling — file-level sync (Syncthing) alone is not sufficient unless both machines use identical paths.
-
-**Verify:** A skill created on one Mac is available on the other. Session logs written on one machine are readable from the other.
+**Verify:** A skill created on one Mac is available on the other. Memory written on one machine is readable from the other.
