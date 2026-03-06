@@ -29,6 +29,7 @@ declare -a SYMLINKS=(
     "gitconfig:$HOME/.gitconfig"
     "zshenv:$HOME/.zshenv"
     "zshrc:$HOME/.zshrc"
+    "shell-core.zsh:$HOME/.zsh/shell-core.zsh"
     "ssh_config:$HOME/.ssh/config"
     "allowed_signers:$HOME/.ssh/allowed_signers"
 )
