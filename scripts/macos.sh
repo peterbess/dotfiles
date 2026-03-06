@@ -84,8 +84,9 @@ echo ""
 
 # -- Clock / Menu Bar -------------------------------------------------------
 
-# Clock settings (24-hour, seconds, date) are unreliable via defaults write
-# on Tahoe. Set manually: System Settings > Control Center > Clock.
+# Clock settings are unreliable via defaults write on Tahoe. Set manually:
+#   24-hour time: System Settings > General > Date & Time
+#   Seconds, date: System Settings > Control Center > Menu Bar Only > Clock
 echo ""
 
 # -- Dock -------------------------------------------------------------------
