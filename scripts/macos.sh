@@ -85,9 +85,10 @@ echo ""
 # -- Clock / Menu Bar -------------------------------------------------------
 
 log "--- Clock ---"
-# macOS Tahoe uses ShowAMPM (not Show24Hour). Setting to false gives 24-hour time.
-apply_default "24-hour clock (disable AM/PM)" \
-    com.apple.menuextra.clock ShowAMPM -bool false
+# AppleICUForce24HourTime is the system-wide 24-hour toggle (overrides locale).
+# ShowAMPM alone is insufficient — it hides the AM/PM label but doesn't switch to 24-hour format.
+apply_default "24-hour clock (system-wide)" \
+    NSGlobalDomain AppleICUForce24HourTime -bool true
 # ShowSeconds may not take effect via defaults on Tahoe. The verify function
 # will warn if it doesn't stick. Set manually: System Settings > Control Center > Clock.
 apply_default "Show seconds in clock" \
