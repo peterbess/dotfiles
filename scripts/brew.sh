@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-DOTFILES_DIR="$HOME/dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BREWFILE="$DOTFILES_DIR/Brewfile"
 DRY_RUN="${DRY_RUN:-false}"
 

@@ -11,14 +11,14 @@ Flat layout. Config files live at repo root. `install.sh` symlinks them to their
 ## Project-specific working rules
 
 ### Autonomous (no approval needed)
-- Edit or create files within this repo (`~/dotfiles/`)
+- Edit or create files within this repo (`~/projects/dotfiles/`)
 - Run syntax checks and verification commands (`zsh -n`, `git config --list`, `brew bundle check`)
 - Run `./install.sh --dry-run`
 
 ### Requires explicit approval
 - Running `install.sh` without `--dry-run` (creates symlinks in home directory)
 - `git commit` and `git push`
-- Modifying files outside `~/dotfiles/`
+- Modifying files outside `~/projects/dotfiles/`
 
 ## Conventions
 

@@ -74,8 +74,8 @@ You should see "Hi [username]! You've successfully authenticated."
 ### 6. Clone and install
 
 ```bash
-git clone git@github.com:peterbess/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone git@github.com:peterbess/dotfiles.git ~/projects/dotfiles
+cd ~/projects/dotfiles
 ./install.sh --dry-run    # preview first
 ./install.sh              # run for real
 ```
@@ -92,7 +92,7 @@ Your new shell configuration takes effect in new sessions. Open a new tab and co
 which uv               # should resolve to /opt/homebrew/bin/uv
 git config user.name   # should show your name
 echo $SSH_AUTH_SOCK    # should show the 1Password agent path
-cd ~/dotfiles && git log --show-signature -1   # should show "Good signature"
+cd ~/projects/dotfiles && git log --show-signature -1   # should show "Good signature"
 ```
 
 **Note:** The install script will show a warning that `~/.local/bin` is not on your PATH. This is expected — it's referring to the old shell session. The new tab picks up the correct PATH from zshrc.
@@ -102,8 +102,8 @@ cd ~/dotfiles && git log --show-signature -1   # should show "Good signature"
 The Brewfile installs iTerm2. Import the Gruvbox color schemes:
 
 ```bash
-open ~/dotfiles/iterm2/gruvbox-dark.itermcolors
-open ~/dotfiles/iterm2/gruvbox-light.itermcolors
+open ~/projects/dotfiles/iterm2/gruvbox-dark.itermcolors
+open ~/projects/dotfiles/iterm2/gruvbox-light.itermcolors
 ```
 
 Each `open` triggers an iTerm2 import dialog. Then configure manually in iTerm2 > Settings > Profiles:
@@ -118,8 +118,8 @@ Each `open` triggers an iTerm2 import dialog. Then configure manually in iTerm2 
 
 ```bash
 # Clone the repo
-git clone git@github.com:peterbess/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone git@github.com:peterbess/dotfiles.git ~/projects/dotfiles
+cd ~/projects/dotfiles
 
 # Preview what will happen
 ./install.sh --dry-run
@@ -136,10 +136,10 @@ cd ~/dotfiles
 To update an existing install, pull and re-run:
 
 ```bash
-cd ~/dotfiles && git pull && ./install.sh
+cd ~/projects/dotfiles && git pull && ./install.sh
 ```
 
-**Important:** Scripts expect the repo cloned to `~/dotfiles`. Do not rename or move it. Open a new terminal tab after installing for changes to take effect.
+Open a new terminal tab after installing for changes to take effect.
 
 ## What it does
 

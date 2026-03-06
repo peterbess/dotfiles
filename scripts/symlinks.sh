@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-DOTFILES_DIR="$HOME/dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 # --- Parse flags (allow override from parent script via env vars) ----------
 

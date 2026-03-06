@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-DOTFILES_DIR="$HOME/dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPTS_DIR="$DOTFILES_DIR/scripts"
 
 # --- Parse flags -----------------------------------------------------------
