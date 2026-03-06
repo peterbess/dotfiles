@@ -3,7 +3,7 @@
 # Structure:
 #   This file holds global defaults and the Include for host entries.
 #   Host-specific entries live in ~/.ssh/config.d/ as separate files.
-#   See ~/dotfiles/ssh_config.d/hosts.example for the template.
+#   See ~/projects/dotfiles/ssh_config.d/hosts.example for the template.
 #   Copy it to ~/.ssh/config.d/hosts.local and fill in real values.
 #
 # SSH reads Include directives first, then applies Host/Match blocks
