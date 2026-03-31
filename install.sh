@@ -62,10 +62,13 @@ run_script() {
 # Step 1: Symlinks
 run_script "$SCRIPTS_DIR/symlinks.sh"
 
-# Step 2: Homebrew packages and Python
+# Step 2: Claude Code configuration (clone claude-config repo, symlink into ~/.claude/)
+run_script "$SCRIPTS_DIR/claude.sh"
+
+# Step 3: Homebrew packages and Python
 run_script "$SCRIPTS_DIR/brew.sh"
 
-# Step 3: macOS defaults (prompted — not automatic)
+# Step 4: macOS defaults (prompted — not automatic)
 if [[ "$DRY_RUN" == true ]]; then
     echo "  Would prompt to apply macOS defaults (skipped in dry run)"
 else
@@ -78,7 +81,7 @@ else
     fi
 fi
 
-# Step 4: iTerm2 color schemes (prompted — requires iTerm2 running)
+# Step 5: iTerm2 color schemes (prompted — requires iTerm2 running)
 if [[ "$DRY_RUN" == true ]]; then
     echo "  Would prompt to import iTerm2 color schemes (skipped in dry run)"
 else

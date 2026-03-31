@@ -153,6 +153,13 @@ Out of scope. Project scaffolding is a developer workflow tool, not machine setu
 
 Designed as part of the storage project. See `~/projects/storage/SPEC.md` for the full sync architecture.
 
-**Summary:** Claude state sync is Phase 4 of a broader storage and sync infrastructure built around Syncthing + TrueNAS as SSOT. Syncthing syncs skills, per-project memory (MEMORY.md), and global CLAUDE.md across both Macs via a TrueNAS bridge node. Settings, debug, cache, and history stay machine-local. Both Macs use username `peter` and `~/projects/` as the project root, so Claude Code's path-based indexing resolves identically on both machines. Symlinks connect synced paths into `~/.claude/`.
+**Summary:** Claude Code config lives in a private GitHub repo (`peterbess/claude-config`) containing the global CLAUDE.md, custom skills, and todo.md. The dotfiles installer (`scripts/claude.sh`) clones this repo to `~/projects/claude-config/` and creates symlinks into `~/.claude/`. This makes Claude Code state reproducible on any machine that runs `install.sh` — no manual symlink creation needed.
 
-**Verify:** A skill created on one Mac is available on the other. Memory written on one machine is readable from the other.
+**What syncs via GitHub (claude-config repo):**
+- `~/.claude/CLAUDE.md` → `~/projects/claude-config/CLAUDE.md`
+- `~/.claude/skills` → `~/projects/claude-config/skills`
+- `~/.claude/todo.md` → `~/projects/claude-config/todo.md`
+
+**What stays machine-local:** Settings, debug, cache, history, per-project memory (MEMORY.md). Both Macs use username `peter` and `~/projects/` as the project root, so Claude Code's path-based indexing resolves identically on both machines.
+
+**Verify:** Run `./install.sh --dry-run` and confirm the Claude Code section reports correct symlinks. On a second machine, run `install.sh` and confirm skills and CLAUDE.md are available. A skill created on one Mac and pushed to GitHub is available on the other after `git pull`.

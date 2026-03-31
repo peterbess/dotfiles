@@ -143,13 +143,17 @@ Open a new terminal tab after installing for changes to take effect.
 
 ## What it does
 
-The installer runs three steps in order:
+The installer runs five steps in order:
 
 1. **Symlinks** — Links config files from this repo to their expected locations (`~/.gitconfig`, `~/.zshrc`, etc.). Idempotent: re-running skips links that already point to the right place.
 
-2. **Homebrew packages** — Runs `brew bundle` against the Brewfile, then installs Python 3.12 via uv (not Homebrew, to avoid venv breakage on upgrades).
+2. **Claude Code configuration** — Clones the [`claude-config`](https://github.com/peterbess/claude-config) repo to `~/projects/claude-config/` (if not already present) and symlinks `CLAUDE.md`, `skills/`, and `todo.md` into `~/.claude/`. This gives Claude Code the global instructions, custom skills, and shared todo list across machines. Requires SSH access to GitHub.
 
-3. **macOS defaults** — Prompted interactively. Applies Finder, Dock, keyboard, and other `defaults write` settings, each verified after write. Skipped in dry-run mode.
+3. **Homebrew packages** — Runs `brew bundle` against the Brewfile, then installs Python 3.12 via uv (not Homebrew, to avoid venv breakage on upgrades).
+
+4. **macOS defaults** — Prompted interactively. Applies Finder, Dock, keyboard, and other `defaults write` settings, each verified after write. Skipped in dry-run mode.
+
+5. **iTerm2 color schemes** — Prompted interactively. Imports Gruvbox Dark/Light color schemes into iTerm2. Requires iTerm2 to be running.
 
 ## What's managed
 
@@ -168,6 +172,7 @@ The installer runs three steps in order:
 | Script | Purpose |
 |--------|---------|
 | `scripts/symlinks.sh` | Creates symlinks, sets SSH permissions (700/600) |
+| `scripts/claude.sh` | Clones claude-config repo, symlinks Claude Code state into ~/.claude/ |
 | `scripts/brew.sh` | Runs brew bundle, installs Python via uv |
 | `scripts/macos.sh` | Applies macOS defaults with verify-after-write |
 

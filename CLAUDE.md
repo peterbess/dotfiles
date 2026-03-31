@@ -6,7 +6,7 @@ Reproducible, minimal macOS development environment. See SPEC.md for the full sp
 
 ## Repository structure
 
-Flat layout. Config files live at repo root. `install.sh` symlinks them to their expected locations (e.g., `gitconfig` → `~/.gitconfig`). To add a new managed config: add the file to the repo, then add a symlink line to `install.sh`.
+Flat layout. Config files live at repo root. `install.sh` symlinks them to their expected locations (e.g., `gitconfig` → `~/.gitconfig`). Modular scripts under `scripts/` handle distinct concerns: `symlinks.sh` (dotfile links + SSH permissions), `claude.sh` (clone claude-config repo + Claude Code symlinks), `brew.sh` (Homebrew + Python), `macos.sh` (system defaults). To add a new managed config: add the file to the repo, then add a symlink entry to the appropriate script.
 
 ## Project-specific working rules
 
