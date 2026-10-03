@@ -18,3 +18,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # === Shared Shell Config =====================================================
 
 source ~/.zsh/shell-core.zsh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/peter/.lmstudio/bin"
+# End of LM Studio CLI section
+
