@@ -29,6 +29,15 @@
 # 	User admin
 # 	Port 22
 
+# --- A short name for a host verified by your own SSH host CA ---
+# The "@cert-authority" line in ~/.ssh/known_hosts trusts the CA only for names matching its pattern list
+# (for example *.example.com). SSH checks the HostName, not the alias, so an alias lets you type a short name
+# without widening that list. ForwardAgent no keeps your key agent off machines that should never have it.
+# Host shortname
+# 	HostName shortname.example.com
+# 	User <username>
+# 	ForwardAgent no
+
 # --- Generic template ---
 # Host nickname
 # 	HostName <ip-or-hostname>
