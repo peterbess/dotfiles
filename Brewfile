@@ -16,7 +16,7 @@ brew "zsh-autosuggestions"      # Gray ghost text from history, accept with righ
 
 # GUI applications
 cask "1password"            # Password manager with SSH agent and developer integrations
-cask "claude-code"          # Anthropic's terminal AI coding assistant
+cask "claude-code@latest"   # Anthropic's terminal AI coding assistant (latest channel, not stable)
 cask "iterm2"               # Terminal replacement
 cask "logi-options+"        # Logitech device configuration
 
