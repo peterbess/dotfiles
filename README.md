@@ -166,6 +166,8 @@ The installer runs five steps in order:
 | `allowed_signers` | `~/.ssh/allowed_signers` | Maps email to public key for local signature verification |
 | `Brewfile` | *(not symlinked)* | Declarative package list: git, gh, uv, 1Password, iTerm2, fonts |
 | `iterm2/` | *(not symlinked)* | Gruvbox Dark/Light color schemes for import into iTerm2 |
+| `shell-core.zsh` | `~/.zsh/shell-core.zsh` (sourced by `zshrc`) | Portable prompt, aliases, history and plugins shared with remote hosts |
+| `shell-kit/install.sh` | *(run on Debian hosts)* | Installs zsh and plugins and sources `shell-core.zsh`: `curl -fsSL https://raw.githubusercontent.com/peterbess/dotfiles/master/shell-kit/install.sh \| bash` |
 
 ### Scripts
 
@@ -182,10 +184,6 @@ Each script is independently runnable with `--dry-run`.
 
 Private host configs (IPs, usernames) go in `~/.ssh/config.d/hosts.local`, which is gitignored. See `ssh_config.d/hosts.example` for the template.
 
-## Design philosophy
-
-Every line in every config file should be explainable. No cargo-culting, no plugin frameworks, no features added "just in case." Start minimal, add when it hurts. See `SPEC.md` for the full specification.
-
 ## Uninstall
 
 Symlinks can be removed individually (e.g., `rm ~/.gitconfig ~/.zshrc ~/.zshenv ~/.ssh/config ~/.ssh/allowed_signers`). Backups from `--force` runs are in `~/.dotfiles-backup/`. To remove Homebrew packages not in the Brewfile: `brew bundle cleanup --file=Brewfile`. To remove uv-managed Python: `uv python uninstall 3.12`.
@@ -195,3 +193,7 @@ Symlinks can be removed individually (e.g., `rm ~/.gitconfig ~/.zshrc ~/.zshenv 
 - macOS on Apple Silicon (see [Fresh Mac setup](#fresh-mac-setup) for full walkthrough)
 - [Homebrew](https://brew.sh)
 - [1Password](https://1password.com) with SSH agent enabled
+
+## Status
+
+Complete and stable; installed on ambrose and bonaventure (bonaventure verified 2026-10-22). Philosophy and scope: `SPEC.md`.
