@@ -62,8 +62,8 @@ run_script() {
 # Step 1: Symlinks
 run_script "$SCRIPTS_DIR/symlinks.sh"
 
-# Step 2: Claude Code configuration (clone claude-config repo, symlink into ~/.claude/)
-run_script "$SCRIPTS_DIR/claude.sh"
+# Step 2: Agent configuration (clone agent-config, link it into ~/.claude, ~/.codex and ~/projects)
+run_script "$SCRIPTS_DIR/agent-config.sh"
 
 # Step 3: Homebrew packages and Python
 run_script "$SCRIPTS_DIR/brew.sh"

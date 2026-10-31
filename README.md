@@ -147,7 +147,7 @@ The installer runs five steps in order:
 
 1. **Symlinks** — Links config files from this repo to their expected locations (`~/.gitconfig`, `~/.zshrc`, etc.). Idempotent: re-running skips links that already point to the right place.
 
-2. **Claude Code configuration** — Clones the [`claude-config`](https://github.com/peterbess/claude-config) repo to `~/projects/claude-config/` (if not already present) and symlinks `CLAUDE.md`, `skills/`, and `todo.md` into `~/.claude/`. This gives Claude Code the global instructions, custom skills, and shared todo list across machines. Requires SSH access to GitHub.
+2. **Agent configuration** — Clones the [`agent-config`](https://github.com/peterbess/agent-config) repo to `~/projects/agent-config/` (if not already present) and links `CLAUDE.md`, `skills/` and `todo.md` into `~/.claude/`, `AGENTS.md` into `~/.codex/`, and `projects-AGENTS.md` to `~/projects/AGENTS.md`. This gives Claude Code and Codex the same global instructions, plus the skills and shared todo list, on every machine. Requires SSH access to GitHub.
 
 3. **Homebrew packages** — Runs `brew bundle` against the Brewfile, then installs Python 3.12 via uv (not Homebrew, to avoid venv breakage on upgrades).
 
@@ -174,7 +174,7 @@ The installer runs five steps in order:
 | Script | Purpose |
 |--------|---------|
 | `scripts/symlinks.sh` | Creates symlinks, sets SSH permissions (700/600) |
-| `scripts/claude.sh` | Clones claude-config repo, symlinks Claude Code state into ~/.claude/ |
+| `scripts/agent-config.sh` | Clones the agent-config repo and links it into ~/.claude, ~/.codex and ~/projects |
 | `scripts/brew.sh` | Runs brew bundle, installs Python via uv |
 | `scripts/macos.sh` | Applies macOS defaults with verify-after-write |
 

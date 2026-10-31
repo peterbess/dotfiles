@@ -16,5 +16,5 @@ Reproducible, minimal macOS setup for ambrose and bonaventure. Philosophy and sc
 - The SSH agent is set once, as `SSH_AUTH_SOCK` in `zshenv`, not as `IdentityAgent` in `ssh_config`.
 - `scripts/symlinks.sh` removes `~/.zprofile` (Homebrew's `shellenv` line); `zshrc` does that job.
 - `shell-core.zsh` is sourced by `zshrc` and fetched by `shell-kit/install.sh` on Debian hosts, so it must stay portable: no Homebrew, macOS or machine-specific paths.
-- `scripts/claude.sh` links only `CLAUDE.md`, `skills/` and `todo.md` into `~/.claude`; `~/projects/AGENTS.md` is linked by hand.
+- `scripts/agent-config.sh` makes all five agent links (`~/.claude/{CLAUDE.md,skills,todo.md}`, `~/.codex/AGENTS.md`, `~/projects/AGENTS.md`) with `ln -sfh`, so re-running it repairs links that point at an old path.
 - `SESSION_LOG.md` is gitignored because the repo is public, so it exists only on the machine that wrote it.

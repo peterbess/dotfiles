@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# claude.sh — Clone claude-config repo and symlink Claude Code state.
+# agent-config.sh — Clone the agent-config repo and link agent state into it.
 #
-# Creates symlinks from ~/.claude/ into ~/projects/claude-config/ so that
-# Claude Code's global config, skills, and todo list are version-controlled
-# and synced across machines via GitHub.
+# Creates symlinks from ~/.claude/, ~/.codex/ and ~/projects/ into
+# ~/projects/agent-config/ so that the global agent instructions (AGENTS.md,
+# read by Codex and, through CLAUDE.md, by Claude Code), skills and the todo
+# list are version-controlled and synced across machines via GitHub.
 #
 # Can be run standalone or called from install.sh.
 # Flags: --dry-run, --force (inherited from caller or passed directly)
@@ -26,15 +27,18 @@ done
 
 # --- Config ----------------------------------------------------------------
 
-CLAUDE_CONFIG_REPO="git@github.com:peterbess/claude-config.git"
-CLAUDE_CONFIG_DIR="$HOME/projects/claude-config"
+AGENT_CONFIG_REPO="git@github.com:peterbess/agent-config.git"
+AGENT_CONFIG_DIR="$HOME/projects/agent-config"
 CLAUDE_DIR="$HOME/.claude"
+CODEX_DIR="$HOME/.codex"
 
-# Symlink map: source (in claude-config repo) → destination (in ~/.claude/)
+# Symlink map: source (in the agent-config repo) → destination
 declare -a SYMLINKS=(
     "CLAUDE.md:$CLAUDE_DIR/CLAUDE.md"
     "skills:$CLAUDE_DIR/skills"
     "todo.md:$CLAUDE_DIR/todo.md"
+    "AGENTS.md:$CODEX_DIR/AGENTS.md"
+    "projects-AGENTS.md:$HOME/projects/AGENTS.md"
 )
 
 # --- Counters for summary -------------------------------------------------
@@ -58,7 +62,7 @@ backup_dir() {
 
 # --- Main logic ------------------------------------------------------------
 
-echo "=== Claude Code Configuration ==="
+echo "=== Agent configuration ==="
 echo ""
 
 if [[ "$DRY_RUN" == true ]]; then
@@ -66,35 +70,35 @@ if [[ "$DRY_RUN" == true ]]; then
     echo ""
 fi
 
-# Step 1: Ensure ~/.claude/ directory exists.
-if [[ ! -d "$CLAUDE_DIR" ]]; then
-    if [[ "$DRY_RUN" == true ]]; then
-        log "Would create $CLAUDE_DIR"
-    else
-        mkdir -p "$CLAUDE_DIR"
-        log "Created $CLAUDE_DIR"
+# Step 1: Ensure the destination directories exist.
+for dir in "$CLAUDE_DIR" "$CODEX_DIR" "$HOME/projects"; do
+    if [[ ! -d "$dir" ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+            log "Would create $dir"
+        else
+            mkdir -p "$dir"
+            log "Created $dir"
+        fi
     fi
-fi
+done
 
-# Step 2: Clone claude-config repo if not present.
-if [[ -d "$CLAUDE_CONFIG_DIR" ]]; then
-    log "claude-config repo already exists at $CLAUDE_CONFIG_DIR — skipping clone"
+# Step 2: Clone the agent-config repo if not present.
+if [[ -d "$AGENT_CONFIG_DIR" ]]; then
+    log "agent-config repo already exists at $AGENT_CONFIG_DIR — skipping clone"
 else
-    log "claude-config repo not found at $CLAUDE_CONFIG_DIR"
+    log "agent-config repo not found at $AGENT_CONFIG_DIR"
     if [[ "$DRY_RUN" == true ]]; then
-        log "Would clone $CLAUDE_CONFIG_REPO → $CLAUDE_CONFIG_DIR"
+        log "Would clone $AGENT_CONFIG_REPO → $AGENT_CONFIG_DIR"
     else
-        # Ensure ~/projects/ exists.
-        mkdir -p "$HOME/projects"
-        log "Cloning claude-config from GitHub..."
-        if git clone "$CLAUDE_CONFIG_REPO" "$CLAUDE_CONFIG_DIR"; then
+        log "Cloning agent-config from GitHub..."
+        if git clone "$AGENT_CONFIG_REPO" "$AGENT_CONFIG_DIR"; then
             log "Cloned successfully"
         else
-            warn "Failed to clone claude-config. Is SSH configured for GitHub?"
+            warn "Failed to clone agent-config. Is SSH configured for GitHub?"
             warn "Run: ssh -T git@github.com   to test your connection."
-            warn "Skipping Claude Code symlinks."
+            warn "Skipping agent symlinks."
             echo ""
-            echo "  --- Summary (Claude Code) ---"
+            echo "  --- Summary (agent config) ---"
             echo "  Clone failed — no symlinks created."
             echo ""
             exit 0  # Non-fatal: dotfiles install can continue without this.
@@ -106,14 +110,14 @@ fi
 for entry in "${SYMLINKS[@]}"; do
     src_name="${entry%%:*}"
     dest="${entry##*:}"
-    src="$CLAUDE_CONFIG_DIR/$src_name"
+    src="$AGENT_CONFIG_DIR/$src_name"
 
     log "Checking $src_name → $dest"
 
     # Source must exist in the repo.
     if [[ ! -e "$src" ]]; then
         warn "Source not found: $src — skipping"
-        (( COUNT_WARNED++ ))
+        COUNT_WARNED=$((COUNT_WARNED + 1))
         continue
     fi
 
@@ -122,17 +126,18 @@ for entry in "${SYMLINKS[@]}"; do
         current_target="$(readlink "$dest")"
         if [[ "$current_target" == "$src" ]]; then
             log "Already linked correctly — skipping"
-            (( COUNT_SKIPPED++ ))
+            COUNT_SKIPPED=$((COUNT_SKIPPED + 1))
             continue
         else
             log "Symlink exists but points to $current_target (expected $src)"
             if [[ "$DRY_RUN" == true ]]; then
                 log "Would update symlink to point to $src"
-                (( COUNT_LINKED++ ))
+                COUNT_LINKED=$((COUNT_LINKED + 1))
             else
-                ln -sf "$src" "$dest"
+                # -h: replace a link that points to a directory instead of following it
+                ln -sfh "$src" "$dest"
                 log "Updated symlink → $src"
-                (( COUNT_LINKED++ ))
+                COUNT_LINKED=$((COUNT_LINKED + 1))
             fi
             continue
         fi
@@ -145,20 +150,20 @@ for entry in "${SYMLINKS[@]}"; do
             if [[ "$DRY_RUN" == true ]]; then
                 log "Would back up $dest → $local_backup_dir/"
                 log "Would create symlink → $src"
-                (( COUNT_BACKED_UP++ ))
-                (( COUNT_LINKED++ ))
+                COUNT_BACKED_UP=$((COUNT_BACKED_UP + 1))
+                COUNT_LINKED=$((COUNT_LINKED + 1))
             else
                 mkdir -p "$local_backup_dir"
                 mv "$dest" "$local_backup_dir/"
                 log "Backed up $dest → $local_backup_dir/"
                 ln -s "$src" "$dest"
                 log "Linked → $src"
-                (( COUNT_BACKED_UP++ ))
-                (( COUNT_LINKED++ ))
+                COUNT_BACKED_UP=$((COUNT_BACKED_UP + 1))
+                COUNT_LINKED=$((COUNT_LINKED + 1))
             fi
         else
             warn "Real file/dir exists at $dest — skipping (use --force to back up and replace)"
-            (( COUNT_WARNED++ ))
+            COUNT_WARNED=$((COUNT_WARNED + 1))
         fi
         continue
     fi
@@ -166,18 +171,18 @@ for entry in "${SYMLINKS[@]}"; do
     # Destination doesn't exist — create the symlink.
     if [[ "$DRY_RUN" == true ]]; then
         log "Would link → $src"
-        (( COUNT_LINKED++ ))
+        COUNT_LINKED=$((COUNT_LINKED + 1))
     else
         ln -s "$src" "$dest"
         log "Linked → $src"
-        (( COUNT_LINKED++ ))
+        COUNT_LINKED=$((COUNT_LINKED + 1))
     fi
 done
 
 # --- Summary ---------------------------------------------------------------
 
 echo ""
-echo "  --- Summary (Claude Code) ---"
+echo "  --- Summary (agent config) ---"
 echo "  Linked:    $COUNT_LINKED"
 echo "  Skipped:   $COUNT_SKIPPED (already correct)"
 echo "  Backed up: $COUNT_BACKED_UP"
